@@ -1,4 +1,4 @@
-# IP Filter Service
+# IP Filter Project
 
 ## Overview
 This project aims to set up an application that crawls Tor exit node IP addresses from online repositories and stores them in a local database. Using the FLASK application, we have implemented two REST API endpoints. The first endpoint obtains Tor network IPs and exlcudes the IPs added by the second API endpoint. The Get request collects data and filters while the Post API provides IPs to filter. The two endpoints can run concurrently. 
