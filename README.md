@@ -12,6 +12,9 @@ This project aims to set up an application that crawls Tor exit node IP addresse
 5. Build: docker-compose build
 6. Run: docker-compose up -d  
 
+## Testing
+1. For unit testing, run the following command: python3 -m unittest unit_test_app.py 
+
 
 ## Usage
 ### Endpoints
@@ -26,8 +29,35 @@ curl -k https://localhost:6000/tor
 # Add IP to non-Tor list
 curl -k -X POST -H "Content-Type: application/json" -d '{"ip": "192.168.1.1"}' https://localhost:6000/non-tor
 
+# Add multiple IPs in the Post Request
+ curl -k -X POST -H "Content-Type: application/json" -d '{"ips": ["192.168.1.1", "192.168.1.2", "192.168.1.3"]}' https://localhost:6000/non-tor
+
 
 ```
 
 
+## Running the Application
 
+### Development Environment
+For running this in the development environment follow these steps:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/blkchnresearch/ip_filter_project
+   cd ip_filter_project
+```
+2. pip3 install -r requirements.txt
+3. python3 backend.py
+4. python3 unit_test_app.py
+
+
+### Producton Environment
+To run the application in prod, follow these steps:
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/blkchnresearch/ip_filter_project
+   cd ip_filter_project
+```
+2. docker-compose build
+3. docker-compose up -d
+4. docker exec -it <container_id> python unit_test_app.py

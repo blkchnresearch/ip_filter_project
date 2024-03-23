@@ -36,25 +36,14 @@ def get_non_tor_ips():
     return {row[0] for row in rows}
 
 # Function to interact with the database: add IP to non-Tor list
-def add_to_non_tor_ips(ip):
+def add_to_non_tor_ips(ips):
     # Again. Simple thing. Just make a connection, and insert the ip.
     connection = sqlite3.connect(path_to_db)
     cursor = connection.cursor()
-    cursor.execute('INSERT OR IGNORE INTO excluded_ips (ip) VALUES (?)', (ip,))
+    for ip in ips:
+        cursor.execute('INSERT OR IGNORE INTO excluded_ips (ip) VALUES (?)', (ip,))
     connection.commit()
     connection.close()
-
-# Function to interact with the database: verify token
-# Commenting it out. Something to test in the future. 
-"""
-def verify_token(token):
-    connection = sqlite3.connect(path_to_db)
-    cursor = connection.cursor()
-    cursor.execute('SELECT token FROM tokens WHERE token = ?', (token,))
-    row = cursor.fetchone()
-    connection.close()
-    return row is not None
-"""
 
 # Endpoint to fetch Tor IPs
 @app.route('/tor', methods=['GET'])
@@ -79,18 +68,25 @@ def tor():
     filtered_ips = allips - non_tor_ips
     return jsonify(list(filtered_ips)), 200  
 
-# Endpoint to add IP to non-Tor list
+# Endpoint to add IPs to non-Tor list
 @app.route('/non-tor', methods=['POST'])
 def non_tor():
     data = request.get_json()
-    ip_addr = data.get('ip')
+    ips = data.get('ips')
+    ip = data.get('ip')
 
-    if ip_addr:
-        add_to_non_tor_ips(ip_addr)
-        return jsonify({'message': 'IP {} added to non-Tor list'.format(ip_addr)}), 200
-    else:
-        return jsonify({'error': 'Invalid IP address provided'}), 400
+    if ips:
+        if isinstance(ips, list):
+            add_to_non_tor_ips(ips)
+            return jsonify({'message': 'IPs added to non-Tor list'}), 200
+        elif isinstance(ips, str):
+            add_to_non_tor_ips([ips])
+            return jsonify({'message': 'IP added to non-Tor list'}), 200
+    elif ip:
+        add_to_non_tor_ips([ip])
+        return jsonify({'message': 'IP added to non-Tor list'}), 200
 
+    return jsonify({'error': 'Invalid IP addresses provided'}), 400
 
 #Error Handling: 
 #Sources :https://flask.palletsprojects.com/en/3.0.x/errorhandling/
@@ -116,4 +112,3 @@ if __name__ == '__main__':
     # commenting it out since Docker keeps throwing error. Going without SSL
     # app.run(debug=True, ssl_context=context, port=6000)
     app.run(debug=True, host="0.0.0.0", port=6000, ssl_context=context)
-
