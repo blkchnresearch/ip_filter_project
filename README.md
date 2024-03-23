@@ -41,23 +41,26 @@ curl -k -X POST -H "Content-Type: application/json" -d '{"ip": "192.168.1.1"}' h
 ### Development Environment
 For running this in the development environment follow these steps:
 
-1. Clone the repository:
-   ```bash
+Clone the repository:
+```bash
    git clone https://github.com/blkchnresearch/ip_filter_project
-   cd ip_filter_project
-```
-2. pip3 install -r requirements.txt
-3. python3 backend.py
-4. python3 unit_test_app.py
+   cd ip_filter_project 
+
+   ```
+
+1. pip3 install -r requirements.txt
+2. python3 backend.py
+3. python3 unit_test_app.py
 
 
 ### Producton Environment
 To run the application in prod, follow these steps:
-1. Clone the repository:
+Clone the repository:
    ```bash
    git clone https://github.com/blkchnresearch/ip_filter_project
    cd ip_filter_project
+   
 ```
-2. docker-compose build
-3. docker-compose up -d
-4. docker exec -it <container_id> python unit_test_app.py
+1. docker-compose build
+2. docker-compose up -d
+3. docker exec -it <container_id> python unit_test_app.py
