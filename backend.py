@@ -45,6 +45,19 @@ def add_to_non_tor_ips(ips):
     connection.commit()
     connection.close()
 
+# Function to interact with the database: verify token
+# Commenting it out. Something to test in the future. 
+"""
+def verify_token(token):
+    connection = sqlite3.connect(path_to_db)
+    cursor = connection.cursor()
+    cursor.execute('SELECT token FROM tokens WHERE token = ?', (token,))
+    row = cursor.fetchone()
+    connection.close()
+    return row is not None
+"""
+
+
 # Endpoint to fetch Tor IPs
 @app.route('/tor', methods=['GET'])
 def tor():
